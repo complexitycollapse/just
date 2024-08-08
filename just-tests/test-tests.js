@@ -138,3 +138,19 @@ test("PASS: not.toBeUndefined", () => {
 test("FAIL: not.toBeUndefined", () => {
   expect(undefined).not.toBeUndefined();
 });
+
+test("PASS: toBeDefined", () => {
+  expect(null).toBeDefined();
+});
+
+test("FAIL: toBeDefined", () => {
+  expect(undefined).toBeDefined();
+});
+
+test("PASS: not.toBeDefined", () => {
+  expect(undefined).not.toBeDefined();
+});
+
+test("FAIL: not.toBeDefined", () => {
+  expect(null).not.toBeDefined();
+});

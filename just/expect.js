@@ -15,7 +15,7 @@ function getLocation(stack) {
   return result;
 }
 
-function makeExpectObj(actual, location, negate) {
+function makeExpectObj(actual, location, negate, unnegated) {
   const match = matcher => (...args) => {
     matcher.apply(undefined, [actual, location, negate].concat(args));
   }
@@ -32,11 +32,14 @@ function makeExpectObj(actual, location, negate) {
     toBeTruthy: match(simpleMatcher(x => x, "to be truthy", false)),
     toBeFalsy: match(simpleMatcher(x => !x, "to be falsy", false)),
     toBeNull: () => match(toBeMatcher)(null),
-    toBeUndefined: () => match(toBeMatcher)(undefined)
+    toBeUndefined: () => match(toBeMatcher)(undefined),
+    toBeDefined: () => expectObj.not.toBeUndefined()
   };
 
   if (!negate) {
-    expectObj.not = makeExpectObj(actual, location, true);
+    expectObj.not = makeExpectObj(actual, location, true, expectObj);
+  } else {
+    expectObj.toBeDefined = unnegated.toBeUndefined;
   }
 
   return expectObj;
