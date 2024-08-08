@@ -272,3 +272,11 @@ test("FAIL: toEqual - combined test", () => {
 test("PASS: toMatchObject - object", () => {
   expect({x: 1, y: { a: 10, b: 20 }, z: 3}).toMatchObject({x: 1, y: { b: 20 } });
 });
+
+test("PASS: async", async () => {
+  expect(1).toBe(1);
+});
+
+test("FAIL: async", async () => {
+  expect(1).toBe(5);
+});

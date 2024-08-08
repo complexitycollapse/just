@@ -6,7 +6,11 @@ let fileTests;
 export async function runFile(filePath, testToRun) {
   fileTests = [];
   await import(filePath);
-  const results = fileTests.filter(t => testToRun === undefined || testToRun === t.name).map(t => execute(t));
+  const results = [];
+
+  for (const test of fileTests.filter(t => testToRun === undefined || testToRun === t.name)) {
+    results.push(await execute(test));
+  }
 
   const failed = results.filter(r => !r.passed);
   const failedCount = failed.length;
@@ -40,9 +44,13 @@ export function registerTest(name, testCallback) {
   fileTests.push({name, testCallback});
 }
 
-function execute({name, testCallback}) {
+async function execute({name, testCallback}) {
   try {
-    testCallback();
+    if (testCallback.constructor.name === "AsyncFunction") {
+      await testCallback();
+    } else {
+      testCallback();
+    }
   } catch (error) {
     if (error instanceof ExpectationFailure) {
       return Object.assign({

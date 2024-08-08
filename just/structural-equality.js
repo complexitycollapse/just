@@ -73,7 +73,7 @@ function checkObject(actual, expected, options) {
 
   let result;
 
-  for (let key of Object.keys(expected)) {
+  for (const key of Object.keys(expected)) {
     if (Object.hasOwn(actual, key)) {
       removeItem(actualKeys, key);
       const res = checkEquality(actual[key], expected[key], options);
@@ -90,7 +90,7 @@ function checkObject(actual, expected, options) {
   }
 
   if (!options.ignoreExtraProperties) {
-    for (let key of actualKeys) {
+    for (const key of actualKeys) {
       const res = {
         passed: false,
         actual: col.green(key + ": " + actual[key])
