@@ -154,3 +154,19 @@ test("PASS: not.toBeDefined", () => {
 test("FAIL: not.toBeDefined", () => {
   expect(null).not.toBeDefined();
 });
+
+test("PASS: toBeNaN", () => {
+  expect(NaN).toBeNaN();
+});
+
+test("FAIL: toBeNaN", () => {
+  expect(0).toBeNaN();
+});
+
+test("PASS: not.toBeNaN", () => {
+  expect(0).not.toBeNaN();
+});
+
+test("FAIL: not.toBeNaN", () => {
+  expect(NaN).not.toBeNaN();
+});

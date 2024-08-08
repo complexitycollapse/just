@@ -33,13 +33,15 @@ function makeExpectObj(actual, location, negate, unnegated) {
     toBeFalsy: match(simpleMatcher(x => !x, "to be falsy", false)),
     toBeNull: () => match(toBeMatcher)(null),
     toBeUndefined: () => match(toBeMatcher)(undefined),
-    toBeDefined: () => expectObj.not.toBeUndefined()
+    toBeDefined: () => expectObj.not.toBeUndefined(),
+    toBeNaN: match(simpleMatcher(x => Number.isNaN(x), "to be NaN" , false))
   };
 
   if (!negate) {
     expectObj.not = makeExpectObj(actual, location, true, expectObj);
   } else {
     expectObj.toBeDefined = unnegated.toBeUndefined;
+    expectObj.toBeNaN = match(simpleMatcher(x => !Number.isNaN(x), "to not be NaN" , false, true));
   }
 
   return expectObj;
