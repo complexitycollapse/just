@@ -7,13 +7,21 @@ export async function runFile(filePath, testToRun) {
   fileTests = [];
   await import(filePath);
   const results = fileTests.filter(t => testToRun === undefined || testToRun === t.name).map(t => execute(t));
-  fileTests = undefined;
 
   const failed = results.filter(r => !r.passed);
+  const failedCount = failed.length;
+  const passedCount = results.length - failedCount;
+  const ignoredCount = fileTests.length - failedCount - passedCount;
   const allPassed = failed.length === 0;
 
   let output = allPassed ? col.greenBack("PASS") : col.redBack("FAIL");
-  output = output + " " + filePath;
+  output = output
+  + col.green(` ${passedCount} passed,`)
+  + col.red(` ${failedCount} failed,`)
+  + col.yellow(` ${ignoredCount} ignored,`)
+  + ` ${fileTests.length} total `
+  + filePath;
+  
   console.log(output);
 
   failed.forEach(f => {
@@ -24,6 +32,8 @@ export async function runFile(filePath, testToRun) {
     if (Object.hasOwn(f, "location")) console.log(" " + f.location.trim());
     if (Object.hasOwn(f, "trace")) console.log(f.trace);
   });
+
+  fileTests = undefined;
 }
 
 export function registerTest(name, testCallback) {
