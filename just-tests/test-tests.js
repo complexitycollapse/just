@@ -90,3 +90,51 @@ test("PASS: toBeLessThan", () => {
 test("FAIL: toBeLessThan", () => {
   expect(5).toBeLessThan(5);
 });
+
+test("PASS: toBeTruthy", () => {
+  expect(5).toBeTruthy();
+});
+
+test("FAIL: toBeTruthy", () => {
+  expect(0).toBeTruthy();
+});
+
+test("PASS: toBeFalsy", () => {
+  expect(0).toBeFalsy();
+});
+
+test("FAIL: toBeFalsy", () => {
+  expect(5).toBeFalsy();
+});
+
+test("PASS: toBeNull", () => {
+  expect(null).toBeNull();
+});
+
+test("FAIL: toBeNull", () => {
+  expect(0).toBeNull();
+});
+
+test("PASS: not.toBeNull", () => {
+  expect(0).not.toBeNull();
+});
+
+test("FAIL: not.toBeNull", () => {
+  expect(null).not.toBeNull();
+});
+
+test("PASS: toBeUndefined", () => {
+  expect(undefined).toBeUndefined();
+});
+
+test("FAIL: toBeUndefined", () => {
+  expect(null).toBeUndefined();
+});
+
+test("PASS: not.toBeUndefined", () => {
+  expect(null).not.toBeUndefined();
+});
+
+test("FAIL: not.toBeUndefined", () => {
+  expect(undefined).not.toBeUndefined();
+});
