@@ -1,5 +1,6 @@
 import { toBeMatcher } from "./matchers/toBe.js";
 import { toHaveLengthMatcher } from "./matchers/toHaveLength.js";
+import { toHavePropertyMatcher } from "./matchers/toHaveProperty.js";
 
 export function expect(actual) {
   const stack = new Error().stack;
@@ -14,12 +15,15 @@ function getLocation(stack) {
 }
 
 function makeExpectObj(actual, location, negate) {
-  const match = (matcher) => expected => matcher(expected, actual, location, negate);
+  const match = matcher => (...args) => {
+    matcher.apply(undefined, [actual, location, negate].concat(args));
+  }
 
   const expectObj = {
 
     toBe: match(toBeMatcher),
-    toHaveLength: match(toHaveLengthMatcher)
+    toHaveLength: match(toHaveLengthMatcher),
+    toHaveProperty: match(toHavePropertyMatcher)
 
   };
 

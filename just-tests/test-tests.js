@@ -50,3 +50,35 @@ test("FAIL: not.toHaveLength - wrong length", () => {
 test("FAIL: not.toHaveLength - not an array", () => {
   expect({x: 1, y: 2, z: 3}).not.toHaveLength(3);
 });
+
+test("PASS: toHaveProperty", () => {
+  expect({x: 1}).toHaveProperty("x");
+});
+
+test("PASS: toHaveProperty - value specified", () => {
+  expect({x: 1}).toHaveProperty("x", 1);
+});
+
+test("FAIL: toHaveProperty", () => {
+  expect({y: 1}).toHaveProperty("x");
+});
+
+test("FAIL: toHaveProperty - value specified", () => {
+  expect({x: 1}).toHaveProperty("x", 2);
+});
+
+test("PASS: not.toHaveProperty", () => {
+  expect({y: 1}).not.toHaveProperty("x");
+});
+
+test("FAIL: not.toHaveProperty - value specified", () => {
+  expect({x: 1}).not.toHaveProperty("x", 1);
+});
+
+test("FAIL: not.toHaveProperty", () => {
+  expect({x: 1}).not.toHaveProperty("x");
+});
+
+test("FAIL: not.toHaveProperty - value specified", () => {
+  expect({x: 1}).not.toHaveProperty("x", 1);
+});

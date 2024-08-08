@@ -1,6 +1,6 @@
 import { ExpectationFailure } from "../expectation-failure.js";
 
-export function toHaveLengthMatcher(expected, actual, location, not) {
+export function toHaveLengthMatcher(actual, location, not, expected) {
   if (!Array.isArray(actual)) {
     throw new ExpectationFailure({location, expected: "an Array", actual});
   }
