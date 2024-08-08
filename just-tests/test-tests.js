@@ -170,3 +170,101 @@ test("PASS: not.toBeNaN", () => {
 test("FAIL: not.toBeNaN", () => {
   expect(NaN).not.toBeNaN();
 });
+
+test("PASS: toEqual - number", () => {
+  expect(5).toEqual(5);
+});
+
+test("FAIL: toEqual - number", () => {
+  expect(5).toEqual(6);
+});
+
+test("PASS: not.toEqual - number", () => {
+  expect(5).not.toEqual(6);
+});
+
+test("FAIL: not.toEqual - number", () => {
+  expect(5).not.toEqual(5);
+});
+
+test("PASS: toEqual - string", () => {
+  expect("foo").toEqual("foo");
+});
+
+test("FAIL: toEqual - string", () => {
+  expect("foo").toEqual("bar");
+});
+
+test("PASS: not.toEqual - string", () => {
+  expect("foo").not.toEqual("bar");
+});
+
+test("FAIL: not.toEqual - string", () => {
+  expect("foo").not.toEqual("foo");
+});
+
+test("PASS: toEqual - undefined", () => {
+  expect(undefined).toEqual(undefined);
+});
+
+test("FAIL: toEqual - undefined", () => {
+  expect("foo").toEqual(undefined);
+});
+
+test("PASS: not.toEqual - undefined", () => {
+  expect("foo").not.toEqual(undefined);
+});
+
+test("FAIL: not.toEqual - undefined", () => {
+  expect(undefined).not.toEqual(undefined);
+});
+
+test("PASS: toEqual - array", () => {
+  expect([1, 2, 3]).toEqual([1, 2, 3]);
+});
+
+test("FAIL: toEqual - array type", () => {
+  expect(5).toEqual([1, 2, 3]);
+});
+
+test("FAIL: toEqual - array too long", () => {
+  expect([1, 2, 3, 4]).toEqual([1, 2, 3]);
+});
+
+test("FAIL: toEqual - array too short", () => {
+  expect([1, 2]).toEqual([1, 2, 3]);
+});
+
+test("FAIL: toEqual - array wrong members", () => {
+  expect([1, 5, 3]).toEqual([1, 2, 3]);
+});
+
+test("PASS: toEqual - object", () => {
+  expect({x: 1, y: 2}).toEqual({x: 1, y: 2});
+});
+
+test("FAIL: toEqual - object type", () => {
+  expect(5).toEqual({x: 1, y: 2});
+});
+
+test("FAIL: toEqual - object wrong value", () => {
+  expect({x: 1, y: 5}).toEqual({x: 1, y: 2});
+});
+
+test("FAIL: toEqual - object property missing", () => {
+  expect({x: 1}).toEqual({x: 1, y: 2});
+});
+
+test("FAIL: toEqual - object unexpected property", () => {
+  expect({x: 1, y: 2, z: 3}).toEqual({x: 1, y: 2});
+});
+
+test("PASS: toEqual - combined test", () => {
+  const obj = {x: 1, y: [1, 2, {a: 6, b: undefined}, "hello"], z: 3, w: null};
+  expect(obj).toEqual(obj);
+});
+
+test("FAIL: toEqual - combined test", () => {
+  const obj = {x: 1, y: [1, 2, {a: 6, b: undefined}, "hello", 7], w: null};
+  expect(obj).toEqual({x: 5, y: [1, 3, {a: 6, b: null}, "goodbye"], z: 3, w: "undefined"});
+});

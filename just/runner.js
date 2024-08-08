@@ -26,8 +26,8 @@ export async function runFile(filePath, testToRun) {
 
   failed.forEach(f => {
     console.log("●  " + col.red(f.testName));
-    log(" Expected:", f, "expected", col.turnGreen);
-    log(" Actual:  ", f, "actual", col.turnRed);
+    log(" Expected:", f, "expected");
+    log(" Actual:  ", f, "actual");
     log("", f, "extraInfo");
     if (Object.hasOwn(f, "location")) console.log(" " + f.location.trim());
     if (Object.hasOwn(f, "trace")) console.log(f.trace);
@@ -71,11 +71,11 @@ function execute({name, testCallback}) {
   };
 }
 
-function log(prefix, obj, prop, stringColour) {
+function log(prefix, obj, prop) {
   if (Object.hasOwn(obj, prop)) {
     const value = obj[prop];
     if (typeof value === "string") {
-      console.log(prefix + " " + stringColour + value + col.restore);
+      console.log(prefix + " " + value);
     } else {
       console.log.apply(console, [prefix].concat(value));
     }
