@@ -8,7 +8,7 @@ test("FAIL: test throws Error", () => {
 });
 
 test("FAIL: test throws non-Error expection", () => {
-  throw {msg: "this is the message"};
+  throw {msg: "the exception message", data: 123};
 });
 
 test("PASS: toBe", () => {
@@ -17,4 +17,16 @@ test("PASS: toBe", () => {
 
 test("FAIL: toBe", () => {
   expect(0).toBe(1);
+});
+
+test("PASS: toHaveLength", () => {
+  expect([1, 2, 3]).toHaveLength(3);
+});
+
+test("FAIL: toHaveLength - wrong length", () => {
+  expect([1, 2, 3]).toHaveLength(5);
+});
+
+test("FAIL: toHaveLength - not an array", () => {
+  expect({x: 1, y: 2, z: 3}).toHaveLength(3);
 });

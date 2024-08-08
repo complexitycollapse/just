@@ -3,10 +3,10 @@ import * as col from "./text-colours.js"
 
 let fileTests;
 
-export async function runFile(filePath) {
+export async function runFile(filePath, testToRun) {
   fileTests = [];
   await import(filePath);
-  const results = fileTests.map(t => execute(t));
+  const results = fileTests.filter(t => testToRun === undefined || testToRun === t.name).map(t => execute(t));
   fileTests = undefined;
 
   const failed = results.filter(r => !r.passed);
@@ -18,8 +18,9 @@ export async function runFile(filePath) {
 
   failed.forEach(f => {
     console.log("●  " + col.red(f.testName));
-    if (Object.hasOwn(f, "expected")) console.log(" Expected: " + col.green(f.expected));
-    if (Object.hasOwn(f, "actual")) console.log(" Actual:   " + col.red(f.actual));
+    log(" Expected:", f, "expected", col.turnGreen);
+    log(" Actual:  ", f, "actual", col.turnRed);
+    log("", f, "extraInfo");
     if (Object.hasOwn(f, "location")) console.log(" " + f.location.trim());
     if (Object.hasOwn(f, "trace")) console.log(f.trace);
   });
@@ -34,13 +35,10 @@ function execute({name, testCallback}) {
     testCallback();
   } catch (error) {
     if (error instanceof ExpectationFailure) {
-      return {
+      return Object.assign({
         passed: false,
-        testName: name,
-        expected: error.expected,
-        actual: error.actual,
-        location: error.location
-      };
+        testName: name
+      }, error);
     } else if (error instanceof Error) {
       return {
         passed: false,
@@ -52,7 +50,7 @@ function execute({name, testCallback}) {
         passed: false,
         testName: name,
         expected: "No exception thrown",
-        actual: "Non-Error exception: " + JSON.stringify(error)
+        actual: ["Non-Error exception:", error]
       };
     }
   }
@@ -61,4 +59,15 @@ function execute({name, testCallback}) {
     passed: true,
     testName: name
   };
+}
+
+function log(prefix, obj, prop, stringColour) {
+  if (Object.hasOwn(obj, prop)) {
+    const value = obj[prop];
+    if (typeof value === "string") {
+      console.log(prefix + " " + stringColour + value + col.restore);
+    } else {
+      console.log.apply(console, [prefix].concat(value));
+    }
+  }
 }
