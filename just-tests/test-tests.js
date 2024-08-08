@@ -82,3 +82,11 @@ test("FAIL: not.toHaveProperty", () => {
 test("FAIL: not.toHaveProperty - value specified", () => {
   expect({x: 1}).not.toHaveProperty("x", 1);
 });
+
+test("PASS: toBeLessThan", () => {
+  expect(5).toBeLessThan(6);
+});
+
+test("FAIL: toBeLessThan", () => {
+  expect(5).toBeLessThan(5);
+});
