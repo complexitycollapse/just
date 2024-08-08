@@ -89,12 +89,14 @@ function checkObject(actual, expected, options) {
     }
   }
 
-  for (let key of actualKeys) {
-    const res = {
-      passed: false,
-      actual: col.green(key + ": " + actual[key])
-    };
-    result = combineResults(result, res, ", ");
+  if (!options.ignoreExtraProperties) {
+    for (let key of actualKeys) {
+      const res = {
+        passed: false,
+        actual: col.green(key + ": " + actual[key])
+      };
+      result = combineResults(result, res, ", ");
+    }
   }
 
   if (result.passed) {

@@ -36,7 +36,8 @@ function makeExpectObj(actual, location, negate, unnegated) {
     toBeUndefined: () => match(toBeMatcher)(undefined),
     toBeDefined: () => expectObj.not.toBeUndefined(),
     toBeNaN: match(simpleMatcher(x => Number.isNaN(x), "to be NaN" , false)),
-    toEqual: match(toEqualMatcher)
+    toEqual: match(toEqualMatcher({})),
+    toMatchObject: match(toEqualMatcher({ ignoreExtraProperties: true }))
   };
 
   if (!negate) {

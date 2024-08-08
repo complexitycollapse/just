@@ -268,3 +268,7 @@ test("FAIL: toEqual - combined test", () => {
   const obj = {x: 1, y: [1, 2, {a: 6, b: undefined}, "hello", 7], w: null};
   expect(obj).toEqual({x: 5, y: [1, 3, {a: 6, b: null}, "goodbye"], z: 3, w: "undefined"});
 });
+
+test("PASS: toMatchObject - object", () => {
+  expect({x: 1, y: { a: 10, b: 20 }, z: 3}).toMatchObject({x: 1, y: { b: 20 } });
+});
