@@ -297,6 +297,12 @@ describe("testing describe", () => {
   test("FAIL: async in describe", async () => {
     expect(1).toBe(5);
   });
+
+  describe("nested", () => {
+    test("FAIL: nested test", () => {
+      expect(1).toBe(2);
+    });
+  });
 });
 
 test("PASS: toInclude - array", () => {

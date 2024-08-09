@@ -6,7 +6,7 @@ This is a testing framework so I don't have to use Jest. I REALLY, REALLY don't 
  - ~~Structural equality~~
  - ~~Async~~
  - ~~describe~~
- - command-line args
+ - ~~command-line args~~
  - ~~exceptions~~
  - mocks
  - ~~toContain/toContainEqual (includes!)~~

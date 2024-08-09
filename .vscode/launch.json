@@ -10,7 +10,8 @@
       "outFiles": ["${workspaceFolder}/dist/**/*.js"], // If you use a build step (e.g., TypeScript)
       "env": {
         "NODE_ENV": "development"
-      }
+      },
+      "args": ["--directory", ".."]
     },
     {
       "type": "node",
