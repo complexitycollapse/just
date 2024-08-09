@@ -5,9 +5,10 @@ This is a testing framework so I don't have to use Jest. I REALLY, REALLY don't 
 ## TODO
  - ~~Structural equality~~
  - ~~Async~~
- - describe
+ - ~~describe~~
  - command-line args
  - exceptions
  - mocks
  - toContain/toContainEqual (includes!)
+ - test cases
  

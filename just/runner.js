@@ -1,21 +1,19 @@
 import { ExpectationFailure } from "./expectation-failure.js";
 import * as col from "./text-colours.js"
 
-let fileTests;
+let fileTestsStack, describeStack, totalTests;
 
 export async function runFile(filePath, testToRun) {
-  fileTests = [];
+  fileTestsStack = [[]];
+  describeStack = [];
+  totalTests = 0;
   await import(filePath);
-  const results = [];
-
-  for (const test of fileTests.filter(t => testToRun === undefined || testToRun === t.name)) {
-    results.push(await execute(test));
-  }
+  const results = await runTests(testToRun);
 
   const failed = results.filter(r => !r.passed);
   const failedCount = failed.length;
   const passedCount = results.length - failedCount;
-  const ignoredCount = fileTests.length - failedCount - passedCount;
+  const ignoredCount = totalTests - failedCount - passedCount;
   const allPassed = failed.length === 0;
 
   let output = allPassed ? col.greenBack("PASS") : col.redBack("FAIL");
@@ -23,7 +21,7 @@ export async function runFile(filePath, testToRun) {
   + col.green(` ${passedCount} passed,`)
   + col.red(` ${failedCount} failed,`)
   + col.yellow(` ${ignoredCount} ignored,`)
-  + ` ${fileTests.length} total `
+  + ` ${totalTests} total `
   + filePath;
   
   console.log(output);
@@ -37,14 +35,49 @@ export async function runFile(filePath, testToRun) {
     if (Object.hasOwn(f, "trace")) console.log(f.trace);
   });
 
-  fileTests = undefined;
+  fileTestsStack = undefined;
+  describeStack = undefined;
+}
+
+async function runTests(testToRun) {
+
+  let results = [];
+
+  for (const test of fileTestsStack[0].filter(t => testToRun === undefined || testToRun === t.name)) {
+    if (test.type === "test") {
+      ++totalTests;
+      results.push(await execute(test));
+    } else if (test.type === "describe") {
+      describeStack.push(test.name);
+      fileTestsStack.unshift([]);
+
+      if (test.testsCallback.constructor.name === "AsyncFunction") {
+        await test.testsCallback();
+      } else {
+        test.testsCallback();
+      }
+
+      const describeResults = await runTests(testToRun);
+      results = results.concat(describeResults);
+      describeStack.pop();
+      fileTestsStack.shift();
+    }
+  }
+
+  return results;
 }
 
 export function registerTest(name, testCallback) {
-  fileTests.push({name, testCallback});
+  const fullName = describeStack.concat([name]).join(" > ");
+  fileTestsStack[0].push({type: "test", name, testCallback, fullName});
 }
 
-async function execute({name, testCallback}) {
+export function registerDescribe(name, testsCallback) {
+  fileTestsStack[0].push({type: "describe", name, testsCallback});
+}
+
+
+async function execute({testCallback, fullName}) {
   try {
     if (testCallback.constructor.name === "AsyncFunction") {
       await testCallback();
@@ -55,18 +88,18 @@ async function execute({name, testCallback}) {
     if (error instanceof ExpectationFailure) {
       return Object.assign({
         passed: false,
-        testName: name
+        testName: fullName
       }, error);
     } else if (error instanceof Error) {
       return {
         passed: false,
-        testName: name,
+        testName: fullName,
         trace: error.stack
       };
     } else {
       return {
         passed: false,
-        testName: name,
+        testName: fullName,
         expected: "No exception thrown",
         actual: ["Non-Error exception:", error]
       };
@@ -75,7 +108,7 @@ async function execute({name, testCallback}) {
 
   return {
     passed: true,
-    testName: name
+    testName: fullName
   };
 }
 

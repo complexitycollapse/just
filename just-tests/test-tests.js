@@ -1,4 +1,4 @@
-import { test, expect } from "../just/just.js";
+import { test, expect, describe } from "../just/just.js";
 
 test("PASS: Passing test", () => {
 });
@@ -279,4 +279,22 @@ test("PASS: async", async () => {
 
 test("FAIL: async", async () => {
   expect(1).toBe(5);
+});
+
+describe("testing describe", () => {
+  test("PASS: describe", () => {
+    expect(1).toBe(1);
+  });
+  
+  test("FAIL: describe", () => {
+    expect(1).toBe(5);
+  });
+
+  test("PASS: async in describe", async () => {
+    expect(1).toBe(1);
+  });
+  
+  test("FAIL: async in describe", async () => {
+    expect(1).toBe(5);
+  });
 });
