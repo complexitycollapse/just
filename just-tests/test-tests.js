@@ -298,3 +298,83 @@ describe("testing describe", () => {
     expect(1).toBe(5);
   });
 });
+
+test("PASS: toInclude - array", () => {
+  expect([1, 2, 3]).toInclude(2);
+});
+
+test("PASS: toInclude - string", () => {
+  expect("123").toInclude("2");
+});
+
+test("FAIL: toInclude - array", () => {
+  expect([1, 2, 3]).toInclude(5);
+});
+
+test("FAIL: toInclude - string", () => {
+  expect("123").toInclude("5");
+});
+
+test("FAIL: toInclude - not iterable", () => {
+  expect({x: 1}).toInclude(1);
+});
+
+test("PASS: not.toInclude - array", () => {
+  expect([1, 2, 3]).not.toInclude(5);
+});
+
+test("PASS: not.toInclude - string", () => {
+  expect("123").not.toInclude("5");
+});
+
+test("FAIL: not.toInclude - array", () => {
+  expect([1, 2, 3]).not.toInclude(2);
+});
+
+test("FAIL: not.toInclude - string", () => {
+  expect("123").not.toInclude("2");
+});
+
+test("FAIL: not.toInclude - not iterable", () => {
+  expect({x: 1}).not.toInclude(1);
+});
+
+test("PASS: toIncludeEqual - array", () => {
+  expect([1, [1, 2], 3]).toIncludeEqual([1, 2]);
+});
+
+test("PASS: toIncludeEqual - string", () => {
+  expect("123").toIncludeEqual("2");
+});
+
+test("FAIL: toIncludeEqual - array", () => {
+  expect([1, [1, 2], 3]).toIncludeEqual([1, 3]);
+});
+
+test("FAIL: toIncludeEqual - string", () => {
+  expect("123").toIncludeEqual("5");
+});
+
+test("FAIL: toIncludeEqual - not iterable", () => {
+  expect({x: 1}).toIncludeEqual(1);
+});
+
+test("PASS: not.toIncludeEqual - array", () => {
+  expect([1, 2, 3]).not.toIncludeEqual(5);
+});
+
+test("PASS: not.toIncludeEqual - string", () => {
+  expect("123").not.toIncludeEqual("5");
+});
+
+test("FAIL: not.toIncludeEqual - array", () => {
+  expect([1, {x: 1}, 3]).not.toIncludeEqual({x: 1});
+});
+
+test("FAIL: not.toIncludeEqual - string", () => {
+  expect("123").not.toIncludeEqual("2");
+});
+
+test("FAIL: not.toIncludeEqual - not iterable", () => {
+  expect({x: 1}).not.toIncludeEqual(1);
+});

@@ -9,6 +9,6 @@ This is a testing framework so I don't have to use Jest. I REALLY, REALLY don't 
  - command-line args
  - exceptions
  - mocks
- - toContain/toContainEqual (includes!)
+ - ~~toContain/toContainEqual (includes!)~~
  - test cases
  

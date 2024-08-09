@@ -3,6 +3,7 @@ import { toBeMatcher } from "./matchers/toBe.js";
 import { toEqualMatcher } from "./matchers/toEqual.js";
 import { toHaveLengthMatcher } from "./matchers/toHaveLength.js";
 import { toHavePropertyMatcher } from "./matchers/toHaveProperty.js";
+import { toIncludeMatcher } from "./matchers/toInclude.js";
 
 export function expect(actual) {
   const stack = new Error().stack;
@@ -37,7 +38,9 @@ function makeExpectObj(actual, location, negate, unnegated) {
     toBeDefined: () => expectObj.not.toBeUndefined(),
     toBeNaN: match(simpleMatcher(x => Number.isNaN(x), "to be NaN" , false)),
     toEqual: match(toEqualMatcher({})),
-    toMatchObject: match(toEqualMatcher({ ignoreExtraProperties: true }))
+    toMatchObject: match(toEqualMatcher({ ignoreExtraProperties: true })),
+    toInclude: match(toIncludeMatcher(false)),
+    toIncludeEqual: match(toIncludeMatcher(true))
   };
 
   if (!negate) {
