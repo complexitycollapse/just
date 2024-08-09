@@ -50,7 +50,7 @@ async function runFile(filePath, testToRun, describeToRun) {
     throw new Error("Error loading test file " + fileUrl, { cause: error });
   }
 
-  const results = await runTests(testToRun, describeToRun);
+  const results = await runTests(testToRun, describeToRun, !!describeToRun);
 
   const failed = results.filter(r => !r.passed);
   const failedCount = failed.length;
@@ -83,27 +83,45 @@ async function runFile(filePath, testToRun, describeToRun) {
   return {passed: passedCount, failed: failedCount, ignored: ignoredCount, total: totalTests};
 }
 
+async function runTest(test, testNameFilter, results) {
+
+  const passesNameTest = !testNameFilter || testNameFilter === test.name;
+  
+  if (passesNameTest) {
+    ++totalTests;
+    results.push(await execute(test));
+  }
+}
+
+async function runDescribe(describe, testNameFilter, describeNameFilter) {
+
+  const passesNameTest = !describeNameFilter || describeNameFilter === describe.name;
+
+  fileTestsStack.unshift([]);
+
+  if (describe.testsCallback.constructor.name === "AsyncFunction") {
+    await describe.testsCallback();
+  } else {
+    describe.testsCallback();
+  }
+
+  const describeResults = await runTests(testNameFilter, passesNameTest ? undefined : describeNameFilter);
+  fileTestsStack.shift();
+  return describeResults;
+}
+
 async function runTests(testToRun, describeToRun) {
   let results = [];
 
-  for (const test of fileTestsStack[0].filter(t => testToRun === undefined || testToRun === t.name)) {
-    if (test.type === "test" && describeToRun === undefined) {
-      ++totalTests;
-      results.push(await execute(test));
-    } else if (test.type === "describe") {
-      describeStack.push(test.name);
-      fileTestsStack.unshift([]);
-
-      if (test.testsCallback.constructor.name === "AsyncFunction") {
-        await test.testsCallback();
-      } else {
-        test.testsCallback();
-      }
-
-      const describeResults = await runTests(testToRun, describeToRun == test.name ? undefined : describeToRun);
-      results = results.concat(describeResults);
-      describeStack.pop();
-      fileTestsStack.shift();
+  for (const testOrDescribe of fileTestsStack[0]) {
+    switch (testOrDescribe.type) {
+      case "test":
+        if (!describeToRun) {
+          await runTest(testOrDescribe, testToRun, results);
+        }
+        break;
+      case "describe":
+        results = results.concat(await runDescribe(testOrDescribe, testToRun, describeToRun));
     }
   }
 
