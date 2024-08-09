@@ -4,6 +4,7 @@ import { toEqualMatcher } from "./matchers/toEqual.js";
 import { toHaveLengthMatcher } from "./matchers/toHaveLength.js";
 import { toHavePropertyMatcher } from "./matchers/toHaveProperty.js";
 import { toIncludeMatcher } from "./matchers/toInclude.js";
+import { toThrowMatcher } from "./matchers/toThrow.js";
 
 export function expect(actual) {
   const stack = new Error().stack;
@@ -40,7 +41,8 @@ function makeExpectObj(actual, location, negate, unnegated) {
     toEqual: match(toEqualMatcher({})),
     toMatchObject: match(toEqualMatcher({ ignoreExtraProperties: true })),
     toInclude: match(toIncludeMatcher(false)),
-    toIncludeEqual: match(toIncludeMatcher(true))
+    toIncludeEqual: match(toIncludeMatcher(true)),
+    toThrow: match(toThrowMatcher)
   };
 
   if (!negate) {

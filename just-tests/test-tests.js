@@ -378,3 +378,35 @@ test("FAIL: not.toIncludeEqual - string", () => {
 test("FAIL: not.toIncludeEqual - not iterable", () => {
   expect({x: 1}).not.toIncludeEqual(1);
 });
+
+test("PASS: toThrow", () => {
+  expect(() => {throw "thing";}).toThrow();
+});
+
+test("PASS: toThrow - argument", () => {
+  expect(() => {throw new Error("the message");}).toThrow("mess");
+});
+
+test("FAIL: toThrow", () => {
+  expect(() => {}).toThrow();
+});
+
+test("FAIL: toThrow - argument", () => {
+  expect(() => {throw new Error("the message");}).toThrow("something else");
+});
+
+test("PASS: not.toThrow", () => {
+  expect(() => {}).not.toThrow();
+});
+
+test("PASS: toThrow - argument", () => {
+  expect(() => {throw new Error("the message");}).not.toThrow("something else");
+});
+
+test("FAIL: not.toThrow", () => {
+  expect(() => {throw "thing";}).not.toThrow();
+});
+
+test("FAIL: toThrow - argument", () => {
+  expect(() => {throw new Error("the message");}).not.toThrow("mess");
+});

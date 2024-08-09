@@ -7,8 +7,9 @@ This is a testing framework so I don't have to use Jest. I REALLY, REALLY don't 
  - ~~Async~~
  - ~~describe~~
  - command-line args
- - exceptions
+ - ~~exceptions~~
  - mocks
  - ~~toContain/toContainEqual (includes!)~~
  - test cases
+ - resolve/reject (currently there's no way to test that an exception was thrown async)
  
