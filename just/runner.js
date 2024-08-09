@@ -13,7 +13,7 @@ export async function run(test, describe, file, directory) {
     const files = scanDirectory(directory);
     const testFiles = files.filter(f => f.search(/.*\.test.js/) != -1);
     for (const f of testFiles) {
-      const result = await runFile(f.replace("\\", "/"), test, describe);
+      const result = await runFile(f, test, describe);
       passed += result.passed;
       failed += result.failed;
       ignored += result.ignored;
@@ -41,7 +41,15 @@ async function runFile(filePath, testToRun, describeToRun) {
   fileTestsStack = [[]];
   describeStack = [];
   totalTests = 0;
-  await import(filePath);
+
+  const fileUrl = convertPathToUrl(filePath);
+
+  try {
+    await import(fileUrl);
+  } catch (error) {
+    throw new Error("Error loading test file " + fileUrl, { cause: error });
+  }
+
   const results = await runTests(testToRun, describeToRun);
 
   const failed = results.filter(r => !r.passed);
@@ -179,4 +187,16 @@ function scanDirectory(directory) {
   
   doDir(directory);
   return files;
+}
+
+export function convertPathToUrl(pathname) {
+  
+  if (path.isAbsolute(pathname) && /^[a-zA-Z]:/.test(pathname)) {
+      // Convert the drive letter to uppercase
+      pathname = pathname.charAt(0).toUpperCase() + pathname.slice(1);
+  }
+
+  const url = "file:///" + path.resolve(pathname).replace(/\\/g, "/");
+
+  return url;
 }

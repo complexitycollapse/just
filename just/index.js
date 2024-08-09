@@ -1,6 +1,11 @@
+export { test, describe, expect } from "./just.js";
 import * as runner from "./runner.js";
 
 let file, describeBlock, test, directory;
+
+function stripQuotes(arg) {
+  return arg.replace(/^"|"$/g, '');
+}
 
 async function runAll() {
   
@@ -18,16 +23,16 @@ for (let i = 2; i < process.argv.length; i += 2) {
 
   switch (process.argv[i]) {
     case "--file":
-      file = val;
+      file = stripQuotes(val);
       break;
     case "--describe":
-      describeBlock = val;
+      describeBlock = stripQuotes(val);
       break;
     case "--test":
-      test = val;
+      test = stripQuotes(val);
       break;
     case "--directory":
-      directory = val;
+      directory = stripQuotes(val);
       break;
     default:
       throw new Error("Argument not recognised: " + val);
