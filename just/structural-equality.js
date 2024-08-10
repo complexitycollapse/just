@@ -83,7 +83,7 @@ function checkObject(actual, expected, options) {
     } else {
       const res = {
         passed: false,
-        expected: col.red(key + ": " + expected[key])
+        expected: col.red(key + ": " + format(expected[key]))
       };
       result = combineResults(result, res, ", ");
     }
@@ -93,7 +93,7 @@ function checkObject(actual, expected, options) {
     for (const key of actualKeys) {
       const res = {
         passed: false,
-        actual: col.green(key + ": " + actual[key])
+        actual: col.green(key + ": " + format(actual[key]))
       };
       result = combineResults(result, res, ", ");
     }
