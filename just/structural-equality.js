@@ -61,7 +61,7 @@ function checkArray(actual, expected, options) {
 }
 
 function checkObject(actual, expected, options) {
-  if (!(typeof actual === "object") || actual === null){
+  if (!(typeof actual === "object") || Array.isArray(actual) || actual === null){
     return {
       passed: false,
       expected: col.yellow(formatObject(expected)),
