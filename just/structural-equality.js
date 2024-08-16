@@ -1,5 +1,6 @@
 import * as col from "./text-colours.js";
 import { removeItem } from "./utils.js";
+import { format, formatArray, formatObject, formatPrimitive } from "./format.js";
 
 export function checkEquality(actual, expected, options) {
   if (Array.isArray(expected)) {
@@ -145,32 +146,4 @@ function combineResults(first, second, separator) {
     expected: combineVals(first.expected, second.expected),
     actual: combineVals(first.actual, second.actual)
   };
-}
-
-function format(value) {
-  if (Array.isArray(value)) {
-    return formatArray(value);
-  } else if (typeof value === "object" && value !== null) {
-    return formatObject(value);
-  } else {
-    return formatPrimitive(value);
-  }
-}
-
-function formatArray(value) {
-  return "[" + value.map(format).join(", ") + "]";
-}
-
-function formatObject(value) {
-  return "{ " + Object.entries(value).map(([key, val]) => key + ": " + format(val)).join(", ") + " }";
-}
-
-function formatPrimitive(prim) {
-  if (prim === undefined) {
-    return "undefined";
-  }  else if (prim === null) {
-    return "null";
-  } else {
-    return JSON.stringify(prim);
-  }
 }
