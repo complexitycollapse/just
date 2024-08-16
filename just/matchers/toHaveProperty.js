@@ -1,4 +1,5 @@
 import { ExpectationFailure } from "../expectation-failure.js";
+import { format } from "../format.js";
 
 export function toHavePropertyMatcher(actual, location, not, ...expectation) {
   const [expectedProperty, expectedValue] = expectation ?? [];
@@ -23,7 +24,8 @@ export function toHavePropertyMatcher(actual, location, not, ...expectation) {
     if (!Object.hasOwn(actual, expectedProperty)) {
       throw new ExpectationFailure({
         location,
-        expected: "to have property " + expectedProperty
+        expected: "to have property " + expectedProperty,
+        extraInfo: "Actual object was: " + format(actual)
       });
     }
     if (expectation.length > 1 && actual[expectedProperty] !== expectedValue) {
